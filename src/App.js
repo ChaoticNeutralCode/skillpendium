@@ -3,7 +3,7 @@ import './App.css';
 import data from './data.json';
 import Skill from './components/Skill/Skill';
 import { Grid, withStyles, Box, Typography } from '@material-ui/core';
-import { AppStyles } from './AppStyles';
+import { AppStyles, masonryBreakpoints } from './AppStyles';
 import Masonry from 'react-masonry-css';
 import CategoryButton from './components/CategoryButton/CategoryButton';
 import Search from './components/Search/Search';
@@ -68,9 +68,17 @@ class App extends Component {
           { classes } = this.props;
 
     return (
-      <Grid container>
-        <Grid item className={classes.actionsArea}>
-          <Typography variant="h1">Skillpendium</Typography>
+      <Grid 
+        container
+      >
+        <Grid 
+          item
+          className={classes.actionsArea}
+          xl={4}
+          lg={5}
+          sm={12}
+        >
+          <Typography variant="h1" className={classes.logoText}>Skillpendium</Typography>
           <Box m={2}>
             <Search onUpdate={this.updateTextFilter.bind(this)} />
           </Box>
@@ -79,12 +87,17 @@ class App extends Component {
               <CategoryButton key={i} category={c} categoryId={i} onToggle={this.updateCategoryFitler.bind(this)}/>
             ))}
           </Box>
-
         </Grid>
-        <Grid item className={classes.skillsArea}>
+        <Grid 
+          item 
+          className={classes.skillsArea} 
+          xl={8}
+          lg={7}
+          sm={12}
+        >
           {skills.length ? (
               <Masonry
-                breakpointCols={3}
+                breakpointCols={masonryBreakpoints}
                 className={classes.masonryContainer}
                 columnClassName={classes.masonryColumn}
               >

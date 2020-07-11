@@ -1,16 +1,22 @@
 export const AppStyles = (theme) => ({
   actionsArea: {
-    flex: '0 1 25%',
     textAlign: 'center'
+  },
+  logoText: {
+    overflowWrap: 'break-word',
+    wordWrap: 'break-word',
+    wordBreak: 'break-all',
+    hyphens: 'auto'
   },
   welcomeText: {
     margin: '2em',
     textAlign: 'center'
   },
   skillsArea: {
-    flex: '1',
     overflow: 'auto',
-    maxHeight: '100vh'
+    [theme.breakpoints.up('lg')]: {
+      maxHeight: '100vh' 
+    }
   },
   masonryContainer: {
     display: 'flex',
@@ -25,3 +31,9 @@ export const AppStyles = (theme) => ({
     marginBottom: '1em'
   }
 });
+
+export const masonryBreakpoints = {
+  default: 3,
+  1500: 2,
+  900: 1
+};
