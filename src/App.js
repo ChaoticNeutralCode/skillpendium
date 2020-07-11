@@ -25,11 +25,16 @@ class App extends Component {
       newCategories.delete(id);
     }
 
-    console.log(newCategories);
-
     this.setState({filter:{
       ...this.state.filter,
       categories: newCategories
+    }});
+  }
+
+  updateTextFilter(text) {
+    this.setState({filter:{
+      ...this.state.filter,
+      text
     }});
   }
 
@@ -67,7 +72,7 @@ class App extends Component {
         <Grid item className={classes.actionsArea}>
           <Typography variant="h1">Skillpendium</Typography>
           <Box m={2}>
-            <Search/>
+            <Search onUpdate={this.updateTextFilter.bind(this)} />
           </Box>
           <Box>
             {data.categories.map((c, i) => (
