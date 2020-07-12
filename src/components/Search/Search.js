@@ -15,6 +15,13 @@ class Search extends Component {
     }
   }
 
+  onSubmit(evt) {
+    evt.preventDefault();
+
+    this.textField.current.blur();
+    this.emit();
+  }
+
   onChange(evt) {
     if(!this.state.update) {
       this.setState({
@@ -28,14 +35,18 @@ class Search extends Component {
 
   render() {
     return (
-      <TextField
-        id="outlined-required"
-        label="Find a Skill"
-        variant="outlined"
-        fullWidth
-        onChange={this.onChange.bind(this)}
-        inputRef={this.textField}
-      />
+      <form
+        onSubmit={this.onSubmit.bind(this)}
+      >
+        <TextField
+          id="outlined-required"
+          label="Find a Skill"
+          variant="outlined"
+          fullWidth
+          onChange={this.onChange.bind(this)}
+          inputRef={this.textField}
+        />
+      </form>
     );
   }
 }

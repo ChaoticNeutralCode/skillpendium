@@ -35,7 +35,7 @@ class App extends Component {
   updateTextFilter(text) {
     this.setState({filter:{
       ...this.state.filter,
-      text
+      text: text.toLowerCase()
     }});
   }
 
