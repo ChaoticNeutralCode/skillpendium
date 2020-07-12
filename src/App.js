@@ -7,6 +7,7 @@ import { AppStyles, masonryBreakpoints } from './AppStyles';
 import Masonry from 'react-masonry-css';
 import CategoryButton from './components/CategoryButton/CategoryButton';
 import Search from './components/Search/Search';
+import Logo from './components/Logo/Logo';
 
 class App extends Component {
   state = {
@@ -78,7 +79,7 @@ class App extends Component {
           lg={5}
           sm={12}
         >
-          <Typography variant="h1" className={classes.logoText}>Skillpendium</Typography>
+          <Logo/>
           <Box m={2}>
             <Search onUpdate={this.updateTextFilter.bind(this)} />
           </Box>

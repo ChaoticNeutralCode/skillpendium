@@ -23,7 +23,7 @@ class CategoryButton extends Component {
           { active } = this.state;
 
     return (
-      <Button color="primary" className={classes.button} variant={active ? 'contained' : 'text'} onClick={() => this.onClick()}>{category}</Button>
+      <Button className={classes.button} variant={active ? 'contained' : 'outlined'} onClick={() => this.onClick()}>{category}</Button>
     );
   }
 }
