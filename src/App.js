@@ -1,21 +1,21 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+  HashRouter
 } from "react-router-dom";
 import './App.css';
 import Home from "./pages/Home";
 
 export default function App() {
   return (
-    <Router>
+    <HashRouter>
       <Switch>
         <Route path={['/:skillId', '/']}>
           <Home />
         </Route>
       </Switch>
-    </Router>
+    </HashRouter>
   );
 }
 
