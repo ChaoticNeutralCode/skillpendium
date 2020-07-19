@@ -11,7 +11,7 @@ export default function App() {
   return (
     <Router>
       <Switch>
-        <Route path={['/:tag', '/']}>
+        <Route path={['/:skillId', '/']}>
           <Home />
         </Route>
       </Switch>

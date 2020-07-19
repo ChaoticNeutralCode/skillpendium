@@ -26,7 +26,7 @@ const Skill = ({ skill, classes, className, onSelect }) => {
             item 
           >
             <Link 
-              to={'/' + skill.tag} 
+              to={'/' + skill.id} 
               onClick={onSelect}
               className={classes.permalink}
             >

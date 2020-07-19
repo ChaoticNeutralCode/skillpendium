@@ -43,7 +43,7 @@ class Home extends Component {
 
   getSkills() {
     const { filter } = this.state,
-          urlFilter = this.props.match.params.tag;
+          urlFilter = this.props.match.params.skillId;
 
     if(!filter.categories.size && !filter.text && !urlFilter) return [];
 
@@ -67,7 +67,7 @@ class Home extends Component {
 
     if(!filter.categories.size && !filter.text && urlFilter) {
       skills = skills.filter(s => {
-        return s.tag.includes(urlFilter);
+        return s.id.includes(urlFilter);
       });
     }
 
