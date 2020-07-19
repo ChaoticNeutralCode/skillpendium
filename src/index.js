@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { CssBaseline, ThemeProvider } from '@material-ui/core';
 import { SkillpendiumTheme } from './muiTheme';
+import App from './App';
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider theme={SkillpendiumTheme}>
-      <CssBaseline/>
-      <App />
-    </ThemeProvider>
+      <ThemeProvider theme={SkillpendiumTheme}>
+        <CssBaseline/>
+        <App />
+      </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

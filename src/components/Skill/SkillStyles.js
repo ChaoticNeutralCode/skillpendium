@@ -1,4 +1,12 @@
 export const SkillStyles = (theme) => ({
+  permalink: {
+    verticalAlign: 'middle',
+    color: 'inherit',
+    padding: '2px 5px'
+  },
+  skillActions: {
+    flex: 1
+  },
   description: {
     marginTop: '1em',
     lineHeight: '1.5em',

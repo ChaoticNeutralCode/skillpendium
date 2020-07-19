@@ -3,27 +3,18 @@ import { Button, withStyles } from '@material-ui/core';
 import { CategoryButtonStyles } from './CategoryButtonStyles';
 
 class CategoryButton extends Component {
-  state = {
-    active: false
-  };
-
   onClick() {
-    const toggledActive = !this.state.active,
-          { categoryId, onToggle } = this.props;
+    const { categoryId, onClick } = this.props;
 
-    if(onToggle) onToggle(categoryId, toggledActive);
-
-    this.setState({
-      active: toggledActive
-    });
+    if(onClick) onClick(categoryId);
   }
 
   render() {
     const { category, classes } = this.props,
-          { active } = this.state;
+          { selected } = this.props;
 
     return (
-      <Button className={classes.button} variant={active ? 'contained' : 'outlined'} onClick={() => this.onClick()}>{category}</Button>
+      <Button className={classes.button} variant={selected ? 'contained' : 'outlined'} onClick={() => this.onClick()}>{category}</Button>
     );
   }
 }
