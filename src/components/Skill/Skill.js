@@ -2,13 +2,12 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { categories } from '../../data.json';
 import { Box, withStyles, Grid } from '@material-ui/core';
 import { SkillStyles } from './SkillStyles';
 import LinkIcon from '@material-ui/icons/Link';
 import { Link } from 'react-router-dom';
 
-const Skill = ({ skill, classes, className, onSelect }) => {
+const Skill = ({ skill, categories, classes, className, onSelect }) => {
   const categoriesString = skill.categories
                             .map(s => categories[s])
                             .join(', ');
@@ -27,7 +26,7 @@ const Skill = ({ skill, classes, className, onSelect }) => {
           >
             <Link 
               to={'/' + skill.id} 
-              onClick={onSelect}
+              onClick={(onSelect ? () => onSelect(skill.id) : null)}
               className={classes.permalink}
             >
               <LinkIcon/>

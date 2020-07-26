@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import data from '../data.json';
 import Skill from '../components/Skill/Skill';
 import { Grid, withStyles, Box, Typography } from '@material-ui/core';
 import { AppStyles, masonryBreakpoints } from '../AppStyles';
@@ -7,83 +6,23 @@ import Masonry from 'react-masonry-css';
 import CategoryButton from '../components/CategoryButton/CategoryButton';
 import Search from '../components/Search/Search';
 import Logo from '../components/Logo/Logo';
-import { withRouter } from 'react-router-dom';
-
-const defaultFilter = {
-  categories: new Set(),
-  text: ''
-};
+import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { fetchData, toggleCategoryFilter, updateTextFilter, setIdFilter, clearFilters } from '../actions';
 
 class Home extends Component {
-  state = {
-    filter: defaultFilter
-  }
+  componentDidMount() {
+    const idInURL = this.props.match.params.skillId;
 
-  categoryClicked(id) {
-    const newCategories = new Set(this.state.filter.categories);
-
-    if(newCategories.has(id)) {
-      newCategories.delete(id);
-    } else {
-      newCategories.add(id);
+    if(idInURL) {
+      this.props.filterById(idInURL);
     }
-
-    this.setState({filter:{
-      ...this.state.filter,
-      categories: newCategories
-    }});
-  }
-
-  updateTextFilter(text) {
-    this.setState({filter:{
-      ...this.state.filter,
-      text: text.toLowerCase()
-    }});
-  }
-
-  getSkills() {
-    const { filter } = this.state,
-          urlFilter = this.props.match.params.skillId;
-
-    if(!filter.categories.size && !filter.text && !urlFilter) return [];
-
-    let skills = data.skills;
-    if(filter.categories.size) {
-      skills = skills.filter(s => {
-          return !!s.categories
-            .filter(c => {
-              return filter.categories.has(c)
-            }).length;
-        });
-    }
-
-    if(filter.text) {
-      skills = skills.filter(s => {
-        return s.name.toLowerCase().includes(filter.text) 
-          || s.description.toLowerCase().includes(filter.text)
-          || s.tag.includes(filter.text);
-      });
-    }
-
-    if(!filter.categories.size && !filter.text && urlFilter) {
-      skills = skills.filter(s => {
-        return s.id.includes(urlFilter);
-      });
-    }
-
-    return skills;
-  }
-
-  clearFilters() {
-    this.setState({
-      filter: defaultFilter
-    });
+    
+    this.props.fetchData();
   }
 
   render() {
-    const skills = this.getSkills(),
-          { classes } = this.props,
-          { text } = this.state.filter;
+    const { categories, skills, classes } = this.props;
 
     return (
       <Grid 
@@ -96,18 +35,26 @@ class Home extends Component {
           lg={5}
           sm={12}
         >
-          <Logo/>
+          <Link 
+            to="/"
+            onClick={this.props.clearFilters}
+          >
+            <Logo/>
+          </Link>
           <Box m={2}>
-            <Search startingText={text} onUpdate={this.updateTextFilter.bind(this)} />
+            <Search 
+              onUpdate={this.props.onTextSearch}
+              clear={this.props.clearTextSearch}
+            />
           </Box>
           <Box>
-            {data.categories.map((c, i) => (
+            {categories.map((c, i) => (
               <CategoryButton 
                 key={i}
                 category={c}
                 categoryId={i}
-                selected={this.state.filter.categories.has(i)}
-                onClick={this.categoryClicked.bind(this)}
+                selected={this.props.selectedCategories.has(i)}
+                onClick={this.props.onToggleCategory}
               />
             ))}
           </Box>
@@ -130,7 +77,8 @@ class Home extends Component {
                     key={s.tag} 
                     className={classes.masonryItem}
                     skill={s}
-                    onSelect={this.clearFilters.bind(this)}
+                    categories={categories}
+                    onSelect={this.props.filterById}
                   />
                 ))}
               </Masonry>
@@ -143,4 +91,23 @@ class Home extends Component {
   }
 }
 
-export default withStyles(AppStyles)(withRouter(Home));
+const mapStateToProps = state => {
+  return {
+    categories: state.data.categories,
+    selectedCategories: state.filters.categories,
+    clearTextSearch: state.clearTextSearch,
+    skills: state.skills
+  }
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    fetchData: () => dispatch(fetchData()),
+    onToggleCategory: id => dispatch(toggleCategoryFilter(id)),
+    onTextSearch: text => dispatch(updateTextFilter(text)),
+    filterById: id => dispatch(setIdFilter([id])),
+    clearFilters: () => dispatch(clearFilters())
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(AppStyles)(withRouter(Home)));

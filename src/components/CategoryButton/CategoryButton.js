@@ -10,8 +10,7 @@ class CategoryButton extends Component {
   }
 
   render() {
-    const { category, classes } = this.props,
-          { selected } = this.props;
+    const { category, selected, classes } = this.props;
 
     return (
       <Button className={classes.button} variant={selected ? 'contained' : 'outlined'} onClick={() => this.onClick()}>{category}</Button>

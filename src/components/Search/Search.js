@@ -33,6 +33,12 @@ class Search extends Component {
     }
   }
 
+  componentDidUpdate() {
+    if(this.props.clear && this.textField.current) {
+      this.textField.current.value = '';
+    }
+  }
+
   render() {
     return (
       <form
