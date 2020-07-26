@@ -8,9 +8,13 @@ import Search from '../components/Search/Search';
 import Logo from '../components/Logo/Logo';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { fetchData, toggleCategoryFilter, updateTextFilter, setIdFilter, clearFilters } from '../actions';
+import { fetchData, toggleCategoryFilter, updateTextFilter, setIdFilter, clearFilters, toggleSkillInUserCollection } from '../actions';
 
 class Home extends Component {
+  state = {
+    selectedCollection: null
+  }
+
   componentDidMount() {
     const idInURL = this.props.match.params.skillId;
 
@@ -21,8 +25,18 @@ class Home extends Component {
     this.props.fetchData();
   }
 
+  onSelectCollection(collectionId, ids) {
+    if(this.state.selectedCollection === collectionId) {
+      this.props.filterByCollection([]);
+      this.setState({ selectedCollection:null });
+    } else {
+      this.props.filterByCollection([...ids]);
+      this.setState({ selectedCollection:collectionId });
+    }
+  }
+
   render() {
-    const { categories, skills, classes } = this.props;
+    const { categories, skills, classes, userCollections } = this.props;
 
     return (
       <Grid 
@@ -48,6 +62,17 @@ class Home extends Component {
             />
           </Box>
           <Box>
+            {userCollections.map((c, i) => (
+              <CategoryButton 
+                key={i}
+                category={c.name}
+                categoryId={i}
+                selected={this.state.selectedCollection === i}
+                onClick={() => this.onSelectCollection(i, c.ids)}
+              />
+            ))
+
+            }
             {categories.map((c, i) => (
               <CategoryButton 
                 key={i}
@@ -79,6 +104,13 @@ class Home extends Component {
                     skill={s}
                     categories={categories}
                     onSelect={this.props.filterById}
+                    userCollections={
+                      userCollections.reduce((skillCollections, c, i) => {
+                        if(c.ids.has(s.id)) skillCollections.push(i);
+                        return skillCollections;
+                      }, [])
+                    }
+                    onToggleCollection={this.props.toggleUserSkill}
                   />
                 ))}
               </Masonry>
@@ -96,7 +128,8 @@ const mapStateToProps = state => {
     categories: state.data.categories,
     selectedCategories: state.filters.categories,
     clearTextSearch: state.clearTextSearch,
-    skills: state.skills
+    skills: state.skills,
+    userCollections: state.userCollections
   }
 };
 
@@ -106,7 +139,9 @@ const mapDispatchToProps = dispatch => {
     onToggleCategory: id => dispatch(toggleCategoryFilter(id)),
     onTextSearch: text => dispatch(updateTextFilter(text)),
     filterById: id => dispatch(setIdFilter([id])),
-    clearFilters: () => dispatch(clearFilters())
+    filterByCollection: ids => dispatch(setIdFilter(ids)),
+    clearFilters: () => dispatch(clearFilters()),
+    toggleUserSkill: (collectionId, skillId) => dispatch(toggleSkillInUserCollection(collectionId, skillId))
   };
 };
 

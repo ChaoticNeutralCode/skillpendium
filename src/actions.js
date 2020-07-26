@@ -44,3 +44,14 @@ export function clearFilters() {
     type: CLEAR_FILTERS
   };
 };
+
+export const TOGGLE_SKILL_IN_COLLECTION = 'TOGGLE_SKILL_IN_COLLECTION';
+export function toggleSkillInUserCollection(collectionId, skillId) {
+  return {
+    type: TOGGLE_SKILL_IN_COLLECTION,
+    payload: {
+      collectionId,
+      skillId
+    }
+  };
+};

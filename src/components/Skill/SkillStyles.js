@@ -1,6 +1,6 @@
 export const SkillStyles = (theme) => ({
   permalink: {
-    verticalAlign: 'middle',
+    verticalAlign: 'baseline',
     color: 'inherit',
     padding: '2px 5px'
   },

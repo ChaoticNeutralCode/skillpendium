@@ -1,4 +1,29 @@
-import { LOAD_DATA, TOGGLE_CATEGORY_FILTER, UPDATE_TEXT_FILTER, SET_ID_FILTER, CLEAR_FILTERS } from "./actions";
+import { LOAD_DATA, TOGGLE_CATEGORY_FILTER, UPDATE_TEXT_FILTER, SET_ID_FILTER, CLEAR_FILTERS, TOGGLE_SKILL_IN_COLLECTION } from "./actions";
+
+function loadUserCollections() {
+  let userCollections = JSON.parse(localStorage.getItem('collections'));
+
+  if(!userCollections) {
+    return [{
+      name: 'My Skills',
+      ids: new Set()
+    }];
+  }
+
+  userCollections = userCollections.map(c => ({
+    ...c,
+    ids: new Set(c.ids)
+  }));
+
+  return userCollections;
+}
+
+function saveUserCollections(userCollections) {
+  localStorage.setItem('collections', JSON.stringify(userCollections.map(c => ({
+    ...c,
+    ids: [...c.ids]
+  }))));
+}
 
 const initialState = {
   data: {
@@ -11,12 +36,13 @@ const initialState = {
     categories: new Set(),
     text: '',
     ids: []
-  }
+  },
+  userCollections: loadUserCollections()
 };
 
 export default (state = initialState, action) => {
   let newState = {
-    data: state.data, // deliberately kept as reference, its a big object
+    ...state,
     skills: [],
     clearTextSearch: false
   };
@@ -44,12 +70,11 @@ export default (state = initialState, action) => {
       filters.text = action.payload;
       break;
     case SET_ID_FILTER:
-      filters.ids = action.payload;
-      
-      if(filters.ids.length === 1) {
-        newState.clearTextSearch = true;
-        filters.categories.clear();
-        filters.text = '';
+      newState.clearTextSearch = true;
+      filters = {
+        categories: new Set(),
+        text: '',
+        ids: action.payload
       }
 
       break;
@@ -60,6 +85,22 @@ export default (state = initialState, action) => {
         text: '',
         ids: []
       };
+
+      break;
+    case TOGGLE_SKILL_IN_COLLECTION:
+      let collection = newState.userCollections[action.payload.collectionId];
+
+      if(collection) {
+        const skillId = action.payload.skillId;
+
+        if(collection.ids.has(skillId)) {
+          collection.ids.delete(skillId);
+        } else {
+          collection.ids.add(skillId);
+        }
+        
+        saveUserCollections(newState.userCollections);
+      }
 
       break;
     default:

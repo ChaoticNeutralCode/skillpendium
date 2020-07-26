@@ -2,12 +2,14 @@ import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { Box, withStyles, Grid } from '@material-ui/core';
+import { Box, withStyles, Grid, IconButton } from '@material-ui/core';
 import { SkillStyles } from './SkillStyles';
 import LinkIcon from '@material-ui/icons/Link';
+import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
+import RemoveCircleOutlineRoundedIcon from '@material-ui/icons/RemoveCircleOutlineRounded';
 import { Link } from 'react-router-dom';
 
-const Skill = ({ skill, categories, classes, className, onSelect }) => {
+const Skill = ({ skill, categories, classes, className, onSelect, userCollections, onToggleCollection }) => {
   const categoriesString = skill.categories
                             .map(s => categories[s])
                             .join(', ');
@@ -24,6 +26,17 @@ const Skill = ({ skill, categories, classes, className, onSelect }) => {
           <Grid 
             item 
           >
+            <IconButton 
+              aria-label="add to My Skills" 
+              component="a" 
+              className={classes.permalink}
+              onClick={() => onToggleCollection ? onToggleCollection(0, skill.id) : null}
+            >
+              {(userCollections && userCollections.length) ?
+                <RemoveCircleOutlineRoundedIcon color="secondary"/> : <AddCircleOutlineRoundedIcon/>
+              }
+              
+            </IconButton>
             <Link 
               to={'/' + skill.id} 
               onClick={(onSelect ? () => onSelect(skill.id) : null)}
